@@ -143,7 +143,6 @@ def main(argv):
             else:
                 audioFile = m[1][langIndex].resolve()
                 cmdline = [str(ffmpegBin), "-y", "-i", str(videoFile), "-i", str(audioFile), "-c:v", "libx264", "-preset", "veryslow", "-crf", "0", "-c:a", "libvorbis", "-shortest", "-filter:v", "fps=23.98", str(resultVideoPath)]
-            print(cmdline)
             run_ffmpeg(cmdline, "Combine video and audio for " + str(Path(videoFile).stem) + " (" + str(i) + "/" + str(len(mediasList)) + ")")
             
         concatVideoPath = Path("RESULT/tmp/" + (Path(sourceFramefile).stem + "_temp.mp4")).resolve()
@@ -353,3 +352,4 @@ def cls():
     
 if __name__ == '__main__':
     main(sys.argv)
+
