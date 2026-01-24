@@ -77,13 +77,24 @@ def main(argv):
                     for file in mediasPath.iterdir():
                         langParts = file.stem.split("_")
                         if len(langParts) > 1:
-                            if len(langParts[1].split(".")) == 1:
-                                found = False
-                                for l in languages:
-                                    if l == langParts[1].lower():
-                                        found = True
-                                if not found:
-                                    languages.append(langParts[1].lower())
+                            found = False
+                            lineNumber = 0
+                            for line2 in framefileContent.splitlines():
+                                line2Parts = line2.split()
+                                if len(line2Parts) != 0:
+                                    if lineNumber != 0:
+                                        if line2Parts[1] == file.stem + ".m2v":
+                                            found = True
+                                            break
+                                lineNumber += 1
+                            if not found:
+                                if len(langParts[1].split(".")) == 1:
+                                    foundLang = False
+                                    for l in languages:
+                                        if l == langParts[1].lower():
+                                            foundLang = True
+                                    if not foundLang:
+                                        languages.append(langParts[1].lower())
                 elif len(lineParts) == 2:
                     found = False
                     videoFilePath = mediasPath.joinpath(lineParts[1]).resolve()
@@ -352,4 +363,3 @@ def cls():
     
 if __name__ == '__main__':
     main(sys.argv)
-
