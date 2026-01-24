@@ -80,10 +80,10 @@ def main(argv):
                             if len(langParts[1].split(".")) == 1:
                                 found = False
                                 for l in languages:
-                                    if l == langParts[1]:
+                                    if l == langParts[1].lower():
                                         found = True
                                 if not found:
-                                    languages.append(langParts[1])
+                                    languages.append(langParts[1].lower())
                 elif len(lineParts) == 2:
                     found = False
                     videoFilePath = mediasPath.joinpath(lineParts[1]).resolve()
@@ -139,30 +139,31 @@ def main(argv):
                 if len(mediasList) == 1:
                     sys.exit("Error : Missing audio file for " + str(Path(videoFile).name) + " video file. Audio will not have sound. Can not continue.")
                 else:
-                    cmdline = str(ffmpegBin) + " -i " + str(videoFile) + " -f lavfi -i anullsrc -c:v libx264 -preset veryslow -crf 0 -c:a libvorbis -shortest -filter:v fps=23.98 " + str(resultVideoPath)
+                    cmdline = [str(ffmpegBin), "-y", "-i", str(videoFile), "-f", "lavfi", "-i", "anullsrc", "-c:v", "libx264", "-preset", "veryslow", "-crf", "0", "-c:a", "libvorbis", "-shortest", "-filter:v", "fps=23.98", str(resultVideoPath)]                    
             else:
                 audioFile = m[1][langIndex].resolve()
-                cmdline = str(ffmpegBin) + " -y -i " + str(videoFile) + " -i " + str(audioFile) + " -c:v libx264 -preset veryslow -crf 0 -c:a libvorbis -shortest -filter:v fps=23.98 " + str(resultVideoPath)
+                cmdline = [str(ffmpegBin), "-y", "-i", str(videoFile), "-i", str(audioFile), "-c:v", "libx264", "-preset", "veryslow", "-crf", "0", "-c:a", "libvorbis", "-shortest", "-filter:v", "fps=23.98", str(resultVideoPath)]
+            print(cmdline)
             run_ffmpeg(cmdline, "Combine video and audio for " + str(Path(videoFile).stem) + " (" + str(i) + "/" + str(len(mediasList)) + ")")
             
         concatVideoPath = Path("RESULT/tmp/" + (Path(sourceFramefile).stem + "_temp.mp4")).resolve()
         if len(mediasList) != 1:            
             videoListPath = Path("RESULT/tmp/video_list.txt").resolve()
-            cmdline = str(ffmpegBin) + " -y -f concat -i " + str(videoListPath) + " -crf 0 " + str(concatVideoPath)
+            cmdline = [str(ffmpegBin), "-y", "-f", "concat", "-i", str(videoListPath), "-crf", "0", str(concatVideoPath)]
             print("")
             run_ffmpeg(cmdline, "Concatenate all video parts to " + str(concatVideoPath.name))
         if choice == "3" or choice == "4":
             oggPath = Path("RESULT/" + (Path(sourceFramefile).stem + ".ogg")).resolve()
-            cmdline = str(ffmpegBin) + " -y -i " + str(concatVideoPath) + " -map 0:a " + str(oggPath)
+            cmdline = [str(ffmpegBin), "-y", "-i", str(concatVideoPath), "-map", "0:a", str(oggPath)]
             print("")
             run_ffmpeg(cmdline, "Extract full audio to " + str(oggPath.name))
             aviPath = Path("RESULT/" + (Path(sourceFramefile).stem + ".avi")).resolve()
-            cmdline = str(mencoderBin)+ " " + str(concatVideoPath) + " -o " + str(aviPath) + " -ovc lavc -lavcopts vcodec=mjpeg -nosound"
+            cmdline = [str(mencoderBin), str(concatVideoPath), "-o", str(aviPath), "-ovc", "lavc", "-lavcopts", "vcodec=mjpeg", "-nosound"]
             print("")
             run_mencoder(cmdline, "Convert to silent MJPEG video " + str(aviPath.name))
         if choice == "2" or choice == "4":
             ogvPath = Path("RESULT/" + (Path(sourceFramefile).stem + ".ogv")).resolve()
-            cmdline = str(ffmpegBin) + " -y -i " + str(concatVideoPath) + " -c:v libtheora -q:v 10 -c:a libvorbis -q:a -1 " + str(ogvPath)
+            cmdline = [str(ffmpegBin), "-y", "-i", str(concatVideoPath), "-c:v", "libtheora", "-q:v", "10", "-c:a", "libvorbis", "-q:a", "-1", str(ogvPath)]
             print("")
             run_ffmpeg(cmdline, "Finally convert to " + str(ogvPath.name))
         
