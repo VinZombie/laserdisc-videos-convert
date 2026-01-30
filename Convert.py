@@ -150,10 +150,10 @@ def main(argv):
                 if len(mediasList) == 1:
                     sys.exit("Error : Missing audio file for " + str(Path(videoFile).name) + " video file. Audio will not have sound. Can not continue.")
                 else:
-                    cmdline = [str(ffmpegBin), "-y", "-i", str(videoFile), "-f", "lavfi", "-i", "anullsrc", "-c:v", "libx264", "-preset", "veryslow", "-crf", "0", "-c:a", "libvorbis", "-shortest", "-filter:v", "fps=23.98", str(resultVideoPath)]                    
+                    cmdline = [str(ffmpegBin), "-y", "-i", str(videoFile), "-f", "lavfi", "-i", "anullsrc", "-c:v", "libx264", "-preset", "veryslow", "-crf", "0", "-c:a", "libvorbis", "-shortest", "-filter:v", "fps=23.976", str(resultVideoPath)]                    
             else:
                 audioFile = m[1][langIndex].resolve()
-                cmdline = [str(ffmpegBin), "-y", "-i", str(videoFile), "-i", str(audioFile), "-c:v", "libx264", "-preset", "veryslow", "-crf", "0", "-c:a", "libvorbis", "-shortest", "-filter:v", "fps=23.98", str(resultVideoPath)]
+                cmdline = [str(ffmpegBin), "-y", "-i", str(videoFile), "-i", str(audioFile), "-c:v", "libx264", "-preset", "veryslow", "-crf", "0", "-c:a", "libvorbis", "-shortest", "-filter:v", "fps=23.976", str(resultVideoPath)]
             run_ffmpeg(cmdline, "Combine video and audio for " + str(Path(videoFile).stem) + " (" + str(i) + "/" + str(len(mediasList)) + ")")
             
         concatVideoPath = Path("RESULT/tmp/" + (Path(sourceFramefile).stem + "_temp.mp4")).resolve()
@@ -363,3 +363,4 @@ def cls():
     
 if __name__ == '__main__':
     main(sys.argv)
+
