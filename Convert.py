@@ -292,7 +292,7 @@ def userInput(l):
         print(" ")
         print("1. Exit")
         print("2. OGV (DirkSimple)")
-        print("3. MJPEG (AVI and OGG, for future application)")
+        print("3. MJPEG (AVI and OGG, maybe for future application...)")
         print("4. Both")
         print(" ")
         number = input("What format do you want to convert your Laser-Disc video ? ")
@@ -363,4 +363,5 @@ def cls():
     
 if __name__ == '__main__':
     main(sys.argv)
+
 
