@@ -173,7 +173,7 @@ def main(argv):
             run_mencoder(cmdline, "Convert to silent MJPEG video " + str(aviPath.name))
         if choice == "2" or choice == "4":
             ogvPath = Path("RESULT/" + (Path(sourceFramefile).stem + ".ogv")).resolve()
-            cmdline = [str(ffmpegBin), "-y", "-i", str(concatVideoPath), "-c:v", "libtheora", "-q:v", "10", "-c:a", "libvorbis", "-q:a", "10", "-g:v", "2", str(ogvPath)]
+            cmdline = [str(ffmpegBin), "-y", "-i", str(concatVideoPath), "-c:v", "libtheora", "-q:v", "10", "-c:a", "libvorbis", "-q:a", "-1", "-g:v", "2", str(ogvPath)]
             print("")
             run_ffmpeg(cmdline, "Finally convert to " + str(ogvPath.name))
         
@@ -363,6 +363,7 @@ def cls():
     
 if __name__ == '__main__':
     main(sys.argv)
+
 
 
 
